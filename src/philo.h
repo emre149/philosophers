@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:29:05 by ededemog          #+#    #+#             */
-/*   Updated: 2024/11/04 15:04:57 by ededemog         ###   ########.fr       */
+/*   Updated: 2024/11/04 18:57:53 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,11 @@ int			cleanup(t_info	*info, int i, bool free_philo);
 
 int			parsing(int ac, char **av, t_info *info);
 int			philo_init(t_info *info);
-void		*philo_routine(void *av);
-int			philo_thread(t_info *info);
 
+// PHILOS
+
+bool		is_dead(t_philo *philo, int i);
+void		*monitor_death(void *ph);
 // UTILS
 
 int			ft_atoi(char *str);

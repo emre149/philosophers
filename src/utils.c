@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:59 by ededemog          #+#    #+#             */
-/*   Updated: 2024/11/04 09:50:45 by ededemog         ###   ########.fr       */
+/*   Updated: 2024/11/04 18:58:05 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,18 @@ bool	safe_stop(t_info *info)
 	stop = info->stop;
 	pthread_mutex_unlock(&info->m_stop);
 	return (stop);
+}
+
+bool	is_dead(t_philo *philo, int i)
+{
+	pthread_mutex_locK(&philo->info->dead);
+	if (i)
+		philo->is_eating = true;
+	if (philo->info->stop)
+	{
+		pthread_mutex_unlock(&philo->info->dead);
+		return (true);
+	}
+	pthread_mutex_unlock(&philo->info->dead);
+	return (false);
 }
