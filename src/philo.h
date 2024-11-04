@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:29:05 by ededemog          #+#    #+#             */
-/*   Updated: 2024/10/29 18:23:32 by ededemog         ###   ########.fr       */
+/*   Updated: 2024/11/04 12:20:44 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_philo
 	pthread_t		thread;
 	long int		last_meal;
 	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*meal_lock;
 	pthread_mutex_t *right_fork;
 	struct s_info 	*info;	
 }	t_philo;
@@ -51,11 +52,28 @@ typedef struct s_info
 	pthread_mutex_t dead;
 }	t_info;
 
+// CLEANING UTILS
+
+void		destroy_global_mutex(t_info *info);
+void		destroy_philo_mutex(t_info *info, int i);
+int			cleanup(t_info	*info, int i, bool free_philo);
+
+// INITS
+
+int			parsing(int ac, char **av, t_info *info);
+int			philo_init(t_info *info);
+void		*philo_routine(void *av);
+int			philo_thread(t_info *info);
+
 // UTILS
 
-int		ft_atoi(char *str);
-void	ft_usleep(int ms);
-int		ft_isdigit(char c);
+int			ft_atoi(char *str);
+void		ft_usleep(int ms);
+int			ft_isdigit(char c);
+void		print(t_philo *philo, char *str);
+bool		safe_stop(t_info *info);
+long int	get_time(void);
+void	*philo_routine(void *av);
 
 
 # endif
