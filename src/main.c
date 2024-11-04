@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:37:46 by ededemog          #+#    #+#             */
-/*   Updated: 2024/11/04 12:19:10 by ededemog         ###   ########.fr       */
+/*   Updated: 2024/11/04 15:11:18 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,7 @@ int	main(int ac, char **av)
 
 	if (!parsing(ac, av, &info))
 		return (1);
-	if (!philo_init(&info))
-	{
-		free_all(&info);
-		return (1);
-	}
-	if (!philo_thread(&info))
-	{
-		free_all(&info);
-		return (1);
-	}
+
 	free_all(&info);
 	return (0);
 }

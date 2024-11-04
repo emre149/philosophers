@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:29:05 by ededemog          #+#    #+#             */
-/*   Updated: 2024/11/04 12:20:44 by ededemog         ###   ########.fr       */
+/*   Updated: 2024/11/04 15:04:57 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,9 @@ int			ft_isdigit(char c);
 void		print(t_philo *philo, char *str);
 bool		safe_stop(t_info *info);
 long int	get_time(void);
-void	*philo_routine(void *av);
+void		*philo_routine(void *av);
+void		free_all(t_info *info);
+
 
 
 # endif
