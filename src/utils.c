@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:59 by ededemog          #+#    #+#             */
-/*   Updated: 2024/11/04 18:58:05 by ededemog         ###   ########.fr       */
+/*   Updated: 2024/11/08 16:43:33 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ void	ft_usleep(int ms)
 {
 	long int	time;
 
-	time = timestamp();
-	while (timestamp() - time < ms)
+	time = get_time();
+	while (get_time() - time < ms)
 		usleep(ms / 10);
 }
 
@@ -59,9 +59,9 @@ void print(t_philo *philo, char *str)
     long int	time;
 
     pthread_mutex_lock(&(philo->info->print));
-    time = timestamp() - philo->info->start;
+    time = get_time() - philo->info->start;
     if (!philo->info->stop && time >= 0 && time <= INT_MAX && !is_dead(philo, 0)) {
-        printf("%lld %d %s", timestamp() - philo->info->start, philo->id, str);
+        printf("%ld %d %s", get_time() - philo->info->start, philo->id, str);
     }
     pthread_mutex_unlock(&(philo->info->print));
 }
@@ -85,7 +85,7 @@ bool	safe_stop(t_info *info)
 
 bool	is_dead(t_philo *philo, int i)
 {
-	pthread_mutex_locK(&philo->info->dead);
+	pthread_mutex_lock(&philo->info->dead);
 	if (i)
 		philo->is_eating = true;
 	if (philo->info->stop)

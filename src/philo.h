@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:29:05 by ededemog          #+#    #+#             */
-/*   Updated: 2024/11/04 18:57:53 by ededemog         ###   ########.fr       */
+/*   Updated: 2024/11/08 16:44:28 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ typedef struct s_philo
 	bool			is_eating;
 	pthread_t		thread;
 	long int		last_meal;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*meal_lock;
+	pthread_mutex_t	left_fork;
+	pthread_mutex_t	meal_lock;
 	pthread_mutex_t *right_fork;
 	struct s_info 	*info;	
 }	t_philo;
@@ -39,6 +39,7 @@ typedef struct s_philo
 typedef struct s_info
 {
 	long int 		start;
+	int				philo_eat;
 	int				philo_nb;
 	int				meal_needed;
 	int				time2_die;
@@ -67,6 +68,10 @@ int			philo_init(t_info *info);
 
 bool		is_dead(t_philo *philo, int i);
 void		*monitor_death(void *ph);
+void	grab_fork(t_philo *philo);
+void	eat(t_philo *philo);
+void	*life(void	*p);
+
 // UTILS
 
 int			ft_atoi(char *str);
@@ -75,7 +80,6 @@ int			ft_isdigit(char c);
 void		print(t_philo *philo, char *str);
 bool		safe_stop(t_info *info);
 long int	get_time(void);
-void		*philo_routine(void *av);
 void		free_all(t_info *info);
 
 
