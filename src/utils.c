@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:59 by ededemog          #+#    #+#             */
-/*   Updated: 2024/11/08 16:43:33 by ededemog         ###   ########.fr       */
+/*   Updated: 2024/11/25 11:16:59 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,4 +95,14 @@ bool	is_dead(t_philo *philo, int i)
 	}
 	pthread_mutex_unlock(&philo->info->dead);
 	return (false);
+}
+
+void ft_fprintf(char *msg)
+{
+	size_t	i;
+
+	i = 0;
+	while (msg[i])
+		i++;
+	write(2, msg, i);
 }

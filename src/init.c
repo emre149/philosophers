@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:19:10 by ededemog          #+#    #+#             */
-/*   Updated: 2024/11/08 16:41:16 by ededemog         ###   ########.fr       */
+/*   Updated: 2024/11/25 11:19:26 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,11 @@ int	philo_init(t_info *info)
 	i = 0;
 	info->philo = malloc(sizeof(t_philo) * info->philo_nb);
 	if (!info->philo)
+	{
+		ft_fprintf("Memory allocation failed\n");
+		cleanup(info, -1, false);
 		return (0);
-	
+	}
 	if (pthread_mutex_init(&info->m_stop, NULL) != 0 ||
 		pthread_mutex_init(&info->m_eat, NULL) != 0 ||
 		pthread_mutex_init(&info->dead, NULL) != 0)
