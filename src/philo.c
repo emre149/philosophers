@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 19:22:59 by ededemog          #+#    #+#             */
-/*   Updated: 2024/11/25 11:26:05 by ededemog         ###   ########.fr       */
+/*   Updated: 2024/11/25 11:58:59 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,26 @@ void	*monitor_death(void *ph)
 	return (NULL);
 }
 
+static void	lonely_philo(t_philo *philo)
+{
+    pthread_mutex_lock(&philo->left_fork);
+    print(philo, " has taken a fork\n");
+    ft_usleep(philo->info->time2_die);
+    print(philo, " died\n");
+    pthread_mutex_lock(&philo->info->m_stop);
+    philo->info->stop = true;
+    pthread_mutex_unlock(&philo->info->m_stop);
+    pthread_mutex_unlock(&philo->left_fork);
+}
+
 void	grab_fork(t_philo *philo)
 {
 	if (philo->info->philo_nb == 1)
 	{
-		ft_usleep(philo->info->time2_die);
-		pthread_mutex_unlock(&philo->left_fork);
+		lonely_philo(philo);
 		return ;
 	}
+	
 	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(philo->right_fork);
@@ -103,6 +115,11 @@ void	*life(void	*p)
 		pthread_mutex_unlock(&philo->info->m_stop);
 		pthread_create(&t, NULL, monitor_death, philo);
 		grab_fork(philo);
+		if (philo->info->stop)  // Vérifie l'arrêt après grab_fork
+    	{
+        	pthread_mutex_unlock(&philo->info->m_stop);
+        	return (NULL);
+    	}
 		eat(philo);
 		pthread_detach(t);
 		if (philo->nb_meals == philo->info->meal_needed)
