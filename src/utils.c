@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:59 by ededemog          #+#    #+#             */
-/*   Updated: 2024/11/25 11:16:59 by ededemog         ###   ########.fr       */
+/*   Updated: 2024/11/26 14:58:30 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	ft_atoi(char *str)
 	i = 0;
 	nb = 0;
 	sign = 1;
-
 	while (str[i] && str[i] <= 32)
 		i++;
 	if (str[i] == '-' || str[i] == '+')
@@ -54,21 +53,22 @@ int	ft_isdigit(char c)
 	return (0);
 }
 
-void print(t_philo *philo, char *str)
+void	print(t_philo *philo, char *str)
 {
-    long int	time;
+	long long int	time;
 
-    pthread_mutex_lock(&(philo->info->print));
-    time = get_time() - philo->info->start;
-    if (!philo->info->stop && time >= 0 && time <= INT_MAX && !is_dead(philo, 0)) {
-        printf("%ld %d %s", get_time() - philo->info->start, philo->id, str);
-    }
-    pthread_mutex_unlock(&(philo->info->print));
+	pthread_mutex_lock(&(philo->info->print));
+	time = get_time() - philo->info->start;
+	if (!philo->info->stop && time >= 0 && time <= INT_MAX && \
+	!is_dead(philo, 0))
+		printf("%lld %d %s", time, philo->id, str);
+	pthread_mutex_unlock(&(philo->info->print));
 }
 
-long int	get_time(void)
+long long int	get_time(void)
 {
-	struct timeval tv;
+	struct timeval	tv;
+
 	gettimeofday(&tv, NULL);
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
@@ -97,7 +97,7 @@ bool	is_dead(t_philo *philo, int i)
 	return (false);
 }
 
-void ft_fprintf(char *msg)
+void	ft_fprintf(char *msg)
 {
 	size_t	i;
 

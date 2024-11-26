@@ -6,51 +6,51 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:29:05 by ededemog          #+#    #+#             */
-/*   Updated: 2024/11/25 11:20:29 by ededemog         ###   ########.fr       */
+/*   Updated: 2024/11/26 15:03:22 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef PHILO_H
+#ifndef PHILO_H
 # define PHILO_H
 
-#include <pthread.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdbool.h>
-#include <sys/time.h>
-#include <limits.h>
+# include <pthread.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <stdbool.h>
+# include <sys/time.h>
+# include <limits.h>
 
 // STRUCTS
 
 typedef struct s_philo
 {
-	int				id;
-	int				nb_meals;
-	bool			is_eating;
-	pthread_t		thread;
-	long int		last_meal;
-	pthread_mutex_t	meal_lock;
-	pthread_mutex_t	left_fork;
-	pthread_mutex_t *right_fork;
-	struct s_info 	*info;	
+	int					id;
+	int					nb_meals;
+	bool				is_eating;
+	pthread_t			thread;
+	long long int		last_meal;
+	pthread_mutex_t		meal_lock;
+	pthread_mutex_t		left_fork;
+	pthread_mutex_t		*right_fork;
+	struct s_info		*info;	
 }	t_philo;
 
 typedef struct s_info
 {
-	long int 		start;
-	int				philo_eat;
-	int				philo_nb;
-	int				meal_needed;
-	int				time2_die;
-	int				time2_eat;
-	int				time2_sleep;
-	int				stop;
-	t_philo			*philo;
-	pthread_mutex_t	print;
-	pthread_mutex_t	m_stop;
-	pthread_mutex_t	m_eat;
-	pthread_mutex_t dead;
+	long long int		start;
+	int					philo_eat;
+	int					philo_nb;
+	int					meal_needed;
+	int					time2_die;
+	int					time2_eat;
+	int					time2_sleep;
+	int					stop;
+	t_philo				*philo;
+	pthread_mutex_t		print;
+	pthread_mutex_t		m_stop;
+	pthread_mutex_t		m_eat;
+	pthread_mutex_t		dead;
 }	t_info;
 
 // CLEANING UTILS
@@ -68,22 +68,19 @@ int			philo_init(t_info *info);
 
 bool		is_dead(t_philo *philo, int i);
 void		*monitor_death(void *ph);
-void	grab_fork(t_philo *philo);
-void	eat(t_philo *philo);
-void	*life(void	*p);
+void		grab_fork(t_philo *philo);
+void		eat(t_philo *philo);
+void		*life(void	*p);
 
 // UTILS
 
-int			ft_atoi(char *str);
-void		ft_usleep(int ms);
-int			ft_isdigit(char c);
-void		print(t_philo *philo, char *str);
-bool		safe_stop(t_info *info);
-long int	get_time(void);
-void		free_all(t_info *info);
-void 		ft_fprintf(char *msg);
+int						ft_atoi(char *str);
+void					ft_usleep(int ms);
+int						ft_isdigit(char c);
+void					print(t_philo *philo, char *str);
+bool					safe_stop(t_info *info);
+long long int			get_time(void);
+void					free_all(t_info *info);
+void					ft_fprintf(char *msg);
 
-
-
-
-# endif
+#endif
