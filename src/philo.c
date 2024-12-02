@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 19:22:59 by ededemog          #+#    #+#             */
-/*   Updated: 2024/12/02 08:20:24 by ededemog         ###   ########.fr       */
+/*   Updated: 2024/12/02 12:17:38 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,34 @@
 
 void	*monitor_death(void *ph)
 {
-	t_philo	*philo;
+	t_philo		*philo;
+	bool		is_eating_state;
+	long long	last_meal_time;
 
 	philo = (t_philo *)ph;
-	while (!is_dead(philo, 0))
+	while (1)
 	{
 		pthread_mutex_lock(&philo->meal_lock);
-		pthread_mutex_lock(&philo->info->m_eat);
-
-		if (!philo->is_eating && (get_time() - philo->last_meal >= \
+		is_eating_state = philo->is_eating;
+		last_meal_time = philo->last_meal;
+		pthread_mutex_unlock(&philo->meal_lock);
+		if (is_dead(philo, 0))
+			return (NULL);
+		if (!is_eating_state && (get_time() - last_meal_time >= \
 		philo->info->time2_die))
 		{
-			pthread_mutex_unlock(&philo->info->m_eat);
-			pthread_mutex_unlock(&philo->meal_lock);
 			pthread_mutex_lock(&philo->info->m_stop);
-			print(philo, " died\n");
-			is_dead(philo, 1);
+			if (!philo->info->stop)
+			{
+				philo->info->stop = true;
+				pthread_mutex_lock(&philo->info->print);
+				printf("%lld %d died\n", get_time() - philo->info->start, \
+				philo->id);
+				pthread_mutex_unlock(&philo->info->print);
+			}
 			pthread_mutex_unlock(&philo->info->m_stop);
 			return (NULL);
 		}
-		pthread_mutex_unlock(&philo->info->m_eat);
-		pthread_mutex_unlock(&philo->meal_lock);
 		ft_usleep(1);
 	}
 	return (NULL);
@@ -78,12 +85,10 @@ void	grab_fork(t_philo *philo)
 void	eat(t_philo *philo)
 {
 	print(philo, " is eating\n");
-	pthread_mutex_lock(&philo->info->m_eat);
-	philo->last_meal = get_time();
 	pthread_mutex_lock(&philo->meal_lock);
+	philo->last_meal = get_time();
 	philo->nb_meals++;
 	pthread_mutex_unlock(&philo->meal_lock);
-	pthread_mutex_unlock(&philo->info->m_eat);
 	ft_usleep(philo->info->time2_eat);
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(&philo->left_fork);
@@ -100,6 +105,9 @@ void	*life(void	*p)
 	philo = (t_philo *)p;
 	if (philo->id % 2 == 0)
 		ft_usleep(philo->info->time2_die / 10);
+	pthread_mutex_lock(&philo->meal_lock);
+	philo->last_meal = get_time();
+	pthread_mutex_unlock(&philo->meal_lock);
 	if (pthread_create(&t, NULL, monitor_death, philo) != 0)
 		return (NULL);
 	pthread_detach(t);
@@ -115,6 +123,7 @@ void	*life(void	*p)
 		pthread_mutex_unlock(&philo->info->m_stop);
 		pthread_mutex_lock(&philo->meal_lock);
 		philo->is_eating = true;
+		philo->last_meal = get_time();
 		pthread_mutex_unlock(&philo->meal_lock);
 		eat(philo);
 		pthread_mutex_lock(&philo->meal_lock);

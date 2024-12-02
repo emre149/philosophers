@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:29:05 by ededemog          #+#    #+#             */
-/*   Updated: 2024/11/26 15:03:22 by ededemog         ###   ########.fr       */
+/*   Updated: 2024/12/02 08:33:14 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,32 +55,32 @@ typedef struct s_info
 
 // CLEANING UTILS
 
-void		destroy_global_mutex(t_info *info);
-void		destroy_philo_mutex(t_info *info, int i);
-int			cleanup(t_info	*info, int i, bool free_philo);
+void			destroy_global_mutex(t_info *info);
+void			destroy_philo_mutex(t_info *info, int i);
+int				cleanup(t_info	*info, int i, bool free_philo);
 
 // INITS
 
-int			parsing(int ac, char **av, t_info *info);
-int			philo_init(t_info *info);
+int				parsing(int ac, char **av, t_info *info);
+int				philo_init(t_info *info);
 
 // PHILOS
 
-bool		is_dead(t_philo *philo, int i);
-void		*monitor_death(void *ph);
-void		grab_fork(t_philo *philo);
-void		eat(t_philo *philo);
-void		*life(void	*p);
+bool			is_dead(t_philo *philo, int i);
+void			*monitor_death(void *ph);
+void			grab_fork(t_philo *philo);
+void			eat(t_philo *philo);
+void			*life(void	*p);
 
 // UTILS
 
-int						ft_atoi(char *str);
-void					ft_usleep(int ms);
-int						ft_isdigit(char c);
-void					print(t_philo *philo, char *str);
-bool					safe_stop(t_info *info);
-long long int			get_time(void);
-void					free_all(t_info *info);
-void					ft_fprintf(char *msg);
+int				ft_atoi(char *str);
+int				ft_isdigit(char c);
+void			ft_usleep(int ms);
+void			print(t_philo *philo, char *str);
+void			free_all(t_info *info);
+void			ft_fprintf(char *msg);
+bool			safe_stop(t_info *info);
+long long int	get_time(void);
 
 #endif

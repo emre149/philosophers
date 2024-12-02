@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:59 by ededemog          #+#    #+#             */
-/*   Updated: 2024/12/02 08:18:47 by ededemog         ###   ########.fr       */
+/*   Updated: 2024/12/02 12:18:06 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,57 +56,16 @@ int	ft_isdigit(char c)
 void	print(t_philo *philo, char *str)
 {
 	long long int	time;
+	bool			should_print;
 
+	pthread_mutex_lock(&(philo->info->m_stop));
+	should_print = !philo->info->stop;
+	pthread_mutex_unlock(&(philo->info->m_stop));
+	if (!should_print)
+		return ;
 	pthread_mutex_lock(&(philo->info->print));
 	time = get_time() - philo->info->start;
-	if (!philo->info->stop && time >= 0 && time <= INT_MAX && \
-	!is_dead(philo, 0))
+	if (time >= 0 && time <= INT_MAX)
 		printf("%lld %d %s", time, philo->id, str);
 	pthread_mutex_unlock(&(philo->info->print));
-}
-
-long long int	get_time(void)
-{
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
-}
-
-bool	safe_stop(t_info *info)
-{
-	bool	stop;
-
-	pthread_mutex_lock(&info->m_stop);
-	stop = info->stop;
-	pthread_mutex_unlock(&info->m_stop);
-	return (stop);
-}
-
-bool	is_dead(t_philo *philo, int i)
-{
-	pthread_mutex_lock(&philo->info->dead);
-	if (i)
-	{
-		philo->info->stop = true;
-		pthread_mutex_unlock(&philo->info->dead);
-		return (true);	
-	}
-	if (philo->info->stop)
-	{
-		pthread_mutex_unlock(&philo->info->dead);
-		return (true);
-	}
-	pthread_mutex_unlock(&philo->info->dead);
-	return (false);
-}
-
-void	ft_fprintf(char *msg)
-{
-	size_t	i;
-
-	i = 0;
-	while (msg[i])
-		i++;
-	write(2, msg, i);
 }
