@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:59 by ededemog          #+#    #+#             */
-/*   Updated: 2024/11/26 14:58:30 by ededemog         ###   ########.fr       */
+/*   Updated: 2024/12/02 08:18:47 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,11 @@ bool	is_dead(t_philo *philo, int i)
 {
 	pthread_mutex_lock(&philo->info->dead);
 	if (i)
-		philo->is_eating = true;
+	{
+		philo->info->stop = true;
+		pthread_mutex_unlock(&philo->info->dead);
+		return (true);	
+	}
 	if (philo->info->stop)
 	{
 		pthread_mutex_unlock(&philo->info->dead);
