@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:37:46 by ededemog          #+#    #+#             */
-/*   Updated: 2024/11/26 14:55:37 by ededemog         ###   ########.fr       */
+/*   Updated: 2024/12/04 12:48:11 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	free_all(t_info *info)
 	i = 0;
 	while (i < info->philo_nb)
 	{
+		pthread_mutex_unlock(&info->philo[i].left_fork);
+		pthread_mutex_unlock(info->philo[i].right_fork);
 		pthread_mutex_destroy(&info->philo[i].left_fork);
 		pthread_mutex_destroy(&info->philo[i].meal_lock);
 		i++;

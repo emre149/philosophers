@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 11:29:29 by ededemog          #+#    #+#             */
-/*   Updated: 2024/11/08 16:43:05 by ededemog         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:12:39 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 
 void	destroy_global_mutex(t_info *info)
 {
+	pthread_mutex_unlock(&info->m_stop);
+	pthread_mutex_unlock(&info->m_eat);
+	pthread_mutex_unlock(&info->dead);
+	pthread_mutex_unlock(&info->print);	
 	pthread_mutex_destroy(&info->m_stop);
 	pthread_mutex_destroy(&info->m_eat);
 	pthread_mutex_destroy(&info->dead);
@@ -23,7 +27,13 @@ void	destroy_global_mutex(t_info *info)
 void	destroy_philo_mutex(t_info *info, int i)
 {
 	while (i >= 0)
-		pthread_mutex_destroy(&info->philo[i--].left_fork);
+	{
+		pthread_mutex_unlock(&info->philo[i].left_fork);
+		pthread_mutex_unlock(info->philo[i].right_fork);
+		pthread_mutex_destroy(&info->philo[i].left_fork);
+		pthread_mutex_destroy(&info->philo[i].meal_lock);
+		i--;		
+	}
 }
 
 int	cleanup(t_info	*info, int i, bool free_philo)

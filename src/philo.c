@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 19:22:59 by ededemog          #+#    #+#             */
-/*   Updated: 2024/12/02 12:25:31 by ededemog         ###   ########.fr       */
+/*   Updated: 2024/12/04 13:06:04 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,38 +61,53 @@ static void	lonely_philo(t_philo *philo)
 
 void	grab_fork(t_philo *philo)
 {
+	pthread_mutex_t	*first_fork;
+	pthread_mutex_t	*second_fork;
+
 	if (philo->info->philo_nb == 1)
 	{
 		lonely_philo(philo);
 		return ;
 	}
-	if (philo->id % 2 == 0)
+	if (&philo->left_fork < philo->right_fork)
 	{
-		pthread_mutex_lock(philo->right_fork);
-		print(philo, " has taken a fork\n");
-		pthread_mutex_lock(&philo->left_fork);
-		print(philo, " has taken a fork\n");
+		first_fork = &philo->left_fork;
+		second_fork = philo->right_fork;
 	}
 	else
 	{
-		ft_usleep(1);
-		pthread_mutex_lock(&philo->left_fork);
-		print(philo, " has taken a fork\n");
-		pthread_mutex_lock(philo->right_fork);
-		print(philo, " has taken a fork\n");
+		first_fork = philo->right_fork;
+		second_fork = &philo->left_fork;
 	}
+	pthread_mutex_lock(first_fork);
+	print(philo, " has taken a fork\n");
+	pthread_mutex_lock(second_fork);
+	print(philo, " has taken a fork\n");
 }
 
 void	eat(t_philo *philo)
 {
+	pthread_mutex_t	*first_fork;
+	pthread_mutex_t	*second_fork;
+
+	if (&philo->left_fork < philo->right_fork)
+	{
+		first_fork = &philo->left_fork;
+		second_fork = philo->right_fork;
+	}
+	else
+	{
+		first_fork = philo->right_fork;
+		second_fork = &philo->left_fork;
+	}
 	print(philo, " is eating\n");
 	pthread_mutex_lock(&philo->meal_lock);
 	philo->last_meal = get_time();
 	philo->nb_meals++;
 	pthread_mutex_unlock(&philo->meal_lock);
 	ft_usleep(philo->info->time2_eat);
-	pthread_mutex_unlock(philo->right_fork);
-	pthread_mutex_unlock(&philo->left_fork);
+	pthread_mutex_unlock(second_fork);
+	pthread_mutex_unlock(first_fork);
 	print(philo, " is sleeping\n");
 	ft_usleep(philo->info->time2_sleep);
 	print(philo, " is thinking\n");
