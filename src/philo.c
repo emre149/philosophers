@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 19:22:59 by ededemog          #+#    #+#             */
-/*   Updated: 2024/12/02 12:17:38 by ededemog         ###   ########.fr       */
+/*   Updated: 2024/12/02 12:25:31 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	grab_fork(t_philo *philo)
 	}
 	else
 	{
+		ft_usleep(1);
 		pthread_mutex_lock(&philo->left_fork);
 		print(philo, " has taken a fork\n");
 		pthread_mutex_lock(philo->right_fork);
