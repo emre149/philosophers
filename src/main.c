@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:37:46 by ededemog          #+#    #+#             */
-/*   Updated: 2024/11/26 14:55:37 by ededemog         ###   ########.fr       */
+/*   Updated: 2024/12/20 12:08:04 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,25 +47,23 @@ int	main(int ac, char **av)
 		free_all(&info);
 		return (1);
 	}
-	i = 0;
-	while (i < info.philo_nb)
+	i = -1;
+	while (++i < info.philo_nb)
 	{
 		if (pthread_create(&threads[i], NULL, life, &info.philo[i]) != 0)
 		{
+			info.stop = true;  // Signal all threads to stop
+			while (--i >= 0)
+				pthread_join(threads[i], NULL);
 			free_all(&info);
 			free(threads);
 			return (1);
 		}
-		i++;
 	}
-	i = 0;
-	while (i < info.philo_nb)
-	{
+	i = -1;
+	while (++i < info.philo_nb)
 		pthread_join(threads[i], NULL);
-		i++;
-	}
 	free(threads);
 	free_all(&info);
-	printf("All philosophers have finished.\n");
 	return (0);
 }

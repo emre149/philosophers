@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:59 by ededemog          #+#    #+#             */
-/*   Updated: 2024/12/02 12:18:06 by ededemog         ###   ########.fr       */
+/*   Updated: 2024/12/21 00:16:49 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,22 @@ int	ft_atoi(char *str)
 
 void	ft_usleep(int ms)
 {
-	long int	time;
+	long int	start;
+	long int	current;
+	long int	elapsed;
 
-	time = get_time();
-	while (get_time() - time < ms)
-		usleep(ms / 10);
+	start = get_time();
+	while (1)
+	{
+		current = get_time();
+		elapsed = current - start;
+		if (elapsed >= ms)
+			break;
+		if (ms - elapsed > 1)
+			usleep(500);
+		else
+			usleep(100);
+	}
 }
 
 int	ft_isdigit(char c)
