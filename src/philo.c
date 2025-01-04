@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 19:22:59 by ededemog          #+#    #+#             */
-/*   Updated: 2025/01/04 19:04:13 by ededemog         ###   ########.fr       */
+/*   Updated: 2025/01/04 19:08:32 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,24 +92,36 @@ void	*monitor_death(void *ph)
 
 void	grab_fork(t_philo *philo)
 {
-	pthread_mutex_t	*first_fork;
-	pthread_mutex_t	*second_fork;
+	if (philo->info->philo_nb == 1)
+	{
+		pthread_mutex_lock(&philo->left_fork);
+		print(philo, " has taken a fork\n");
+		ft_usleep(philo->info->time2_die);
+		pthread_mutex_lock(&philo->info->m_stop);
+		philo->info->stop = true;
+		pthread_mutex_unlock(&philo->info->m_stop);
+		pthread_mutex_lock(&philo->info->print);
+		printf("%lld %d died\n", get_time() - philo->info->start, philo->id);
+		pthread_mutex_unlock(&philo->info->print);
+		pthread_mutex_unlock(&philo->left_fork);
+		return ;
+	}
 
 	if (philo->id % 2 == 0)
 	{
-		first_fork = &philo->left_fork;
-		second_fork = philo->right_fork;
+		pthread_mutex_lock(&philo->left_fork);
+		print(philo, " has taken a fork\n");
+		pthread_mutex_lock(philo->right_fork);
+		print(philo, " has taken a fork\n");
 	}
 	else
 	{
 		usleep(500);
-		first_fork = philo->right_fork;
-		second_fork = &philo->left_fork;
+		pthread_mutex_lock(philo->right_fork);
+		print(philo, " has taken a fork\n");
+		pthread_mutex_lock(&philo->left_fork);
+		print(philo, " has taken a fork\n");
 	}
-	pthread_mutex_lock(first_fork);
-	print(philo, " has taken a fork\n");
-	pthread_mutex_lock(second_fork);
-	print(philo, " has taken a fork\n");
 }
 
 void	eat(t_philo *philo)
@@ -144,6 +156,8 @@ void	*life(void	*p)
 	while (!is_dead(philo, 0))
 	{
 		grab_fork(philo);
+		if (philo->info->philo_nb == 1)
+			return (NULL);
 		pthread_mutex_lock(&philo->meal_lock);
 		philo->is_eating = true;
 		pthread_mutex_unlock(&philo->meal_lock);

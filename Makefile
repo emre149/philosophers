@@ -6,12 +6,12 @@
 #    By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/29 16:12:40 by ededemog          #+#    #+#              #
-#    Updated: 2024/12/02 09:06:29 by ededemog         ###   ########.fr        #
+#    Updated: 2025/01/04 19:09:28 by ededemog         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
-CFLAGS = -Wall -Wextra -Werror -pthread -g
+CFLAGS = -Wall -Wextra -Werror -pthread -g -fsanitize=thread
 RM = rm -rf
 SRCS = 	src/main.c\
 		src/init.c\
