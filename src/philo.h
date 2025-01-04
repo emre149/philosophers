@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:29:05 by ededemog          #+#    #+#             */
-/*   Updated: 2024/12/02 08:33:14 by ededemog         ###   ########.fr       */
+/*   Updated: 2025/01/04 19:02:04 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_info
 	pthread_mutex_t		m_eat;
 	pthread_mutex_t		dead;
 	pthread_mutex_t		m_philo_eat;
+	pthread_mutex_t		m_start;
 }	t_info;
 
 // CLEANING UTILS

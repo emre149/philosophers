@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 11:29:29 by ededemog          #+#    #+#             */
-/*   Updated: 2024/11/08 16:43:05 by ededemog         ###   ########.fr       */
+/*   Updated: 2025/01/04 19:02:55 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void	destroy_global_mutex(t_info *info)
 	pthread_mutex_destroy(&info->m_eat);
 	pthread_mutex_destroy(&info->dead);
 	pthread_mutex_destroy(&info->print);
+	pthread_mutex_destroy(&info->m_philo_eat);
+	pthread_mutex_destroy(&info->m_start);
 }
 
 void	destroy_philo_mutex(t_info *info, int i)

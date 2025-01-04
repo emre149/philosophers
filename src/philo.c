@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 19:22:59 by ededemog          #+#    #+#             */
-/*   Updated: 2024/12/21 00:16:55 by ededemog         ###   ########.fr       */
+/*   Updated: 2025/01/04 19:04:13 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,26 +45,26 @@ void	*monitor_death(void *ph)
 			pthread_mutex_unlock(&philo->meal_lock);
 			return (NULL);
 		}
-		pthread_mutex_unlock(&philo->meal_lock);.
+		pthread_mutex_unlock(&philo->meal_lock);
 	}
 }
 
-static void	lonely_philo(t_philo *philo)
-{
-	pthread_mutex_lock(&philo->left_fork);
-	print(philo, " has taken a fork\n");
-	ft_usleep(philo->info->time2_die);
-	pthread_mutex_lock(&philo->info->m_stop);
-	if (!philo->info->stop)
-	{
-		philo->info->stop = true;
-		pthread_mutex_lock(&philo->info->print);
-		printf("%lld %d died\n", get_time() - philo->info->start, philo->id);
-		pthread_mutex_unlock(&philo->info->print);
-	}
-	pthread_mutex_unlock(&philo->info->m_stop);
-	pthread_mutex_unlock(&philo->left_fork);
-}
+// static void	lonely_philo(t_philo *philo)
+// {
+// 	pthread_mutex_lock(&philo->left_fork);
+// 	print(philo, " has taken a fork\n");
+// 	ft_usleep(philo->info->time2_die);
+// 	pthread_mutex_lock(&philo->info->m_stop);
+// 	if (!philo->info->stop)
+// 	{
+// 		philo->info->stop = true;
+// 		pthread_mutex_lock(&philo->info->print);
+// 		printf("%lld %d died\n", get_time() - philo->info->start, philo->id);
+// 		pthread_mutex_unlock(&philo->info->print);
+// 	}
+// 	pthread_mutex_unlock(&philo->info->m_stop);
+// 	pthread_mutex_unlock(&philo->left_fork);
+// }
 
 // void	grab_fork(t_philo *philo)
 // {
@@ -118,10 +118,10 @@ void	eat(t_philo *philo)
 	pthread_mutex_lock(&philo->meal_lock);
 	philo->last_meal = get_time();
 	philo->nb_meals++;
+	pthread_mutex_unlock(&philo->meal_lock);
 	ft_usleep(philo->info->time2_eat);
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(&philo->left_fork);
-	pthread_mutex_unlock(&philo->meal_lock);
 	print(philo, " is sleeping\n");
 	ft_usleep(philo->info->time2_sleep);
 	print(philo, " is thinking\n");
@@ -153,18 +153,18 @@ void	*life(void	*p)
 		if (philo->nb_meals == philo->info->meal_needed)
 		{
 			pthread_mutex_unlock(&philo->meal_lock);
-			pthread_mutex_lock(&philo->info->m_stop);
+			pthread_mutex_lock(&philo->info->m_philo_eat);
 			if (++philo->info->philo_eat == philo->info->philo_nb)
 			{
+				pthread_mutex_lock(&philo->info->m_stop);
 				philo->info->stop = true;
+				pthread_mutex_unlock(&philo->info->m_stop);
 				pthread_mutex_lock(&philo->info->print);
 				printf("All philosophers have eaten %d times\n", 
 					philo->info->meal_needed);
 				pthread_mutex_unlock(&philo->info->print);
-				pthread_mutex_unlock(&philo->info->m_stop);
-				return (NULL);
 			}
-			pthread_mutex_unlock(&philo->info->m_stop);
+			pthread_mutex_unlock(&philo->info->m_philo_eat);
 			return (NULL);
 		}
 		pthread_mutex_unlock(&philo->meal_lock);

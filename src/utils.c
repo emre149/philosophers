@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:26:59 by ededemog          #+#    #+#             */
-/*   Updated: 2024/12/21 00:16:49 by ededemog         ###   ########.fr       */
+/*   Updated: 2025/01/04 19:02:23 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,18 +70,19 @@ void	print(t_philo *philo, char *str)
 	bool			should_print;
 	long long int	start_time;
 
-	pthread_mutex_lock(&(philo->info->m_stop));
+	pthread_mutex_lock(&philo->info->m_stop);
 	should_print = !philo->info->stop;
-	pthread_mutex_unlock(&(philo->info->m_stop));
+	pthread_mutex_unlock(&philo->info->m_stop);
 	if (!should_print)
 		return ;
-	pthread_mutex_lock(&(philo->info->start));
-	start_time = philo->info->start;
-	pthread_mutex_unlock(&(philo->info->start));
 
-	pthread_mutex_lock(&(philo->info->print));
+	pthread_mutex_lock(&philo->info->m_start);
+	start_time = philo->info->start;
+	pthread_mutex_unlock(&philo->info->m_start);
+
+	pthread_mutex_lock(&philo->info->print);
 	time = get_time() - start_time;
 	if (time >= 0 && time <= INT_MAX)
 		printf("%lld %d %s", time, philo->id, str);
-	pthread_mutex_unlock(&(philo->info->print));
+	pthread_mutex_unlock(&philo->info->print);
 }

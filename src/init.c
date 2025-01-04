@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 18:19:10 by ededemog          #+#    #+#             */
-/*   Updated: 2024/12/02 09:01:23 by ededemog         ###   ########.fr       */
+/*   Updated: 2025/01/04 19:02:17 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,14 @@ int	parsing(int ac, char **av, t_info *info)
 
 static int	init_mutexs(t_info *info)
 {
-	if (pthread_mutex_init(&info->print, NULL) != 0 || \
-	pthread_mutex_init(&info->m_stop, NULL) != 0 || \
-	pthread_mutex_init(&info->m_eat, NULL) != 0 || \
-	pthread_mutex_init(&info->dead, NULL) != 0)
+	if (pthread_mutex_init(&info->print, NULL) != 0
+		|| pthread_mutex_init(&info->m_stop, NULL) != 0
+		|| pthread_mutex_init(&info->m_eat, NULL) != 0
+		|| pthread_mutex_init(&info->dead, NULL) != 0
+		|| pthread_mutex_init(&info->m_philo_eat, NULL) != 0
+		|| pthread_mutex_init(&info->m_start, NULL) != 0)
 	{
-		free_all(info);
+		ft_fprintf("Mutex initialization failed\n");
 		return (0);
 	}
 	return (1);
@@ -65,18 +67,21 @@ static int	init_mutexs(t_info *info)
 
 static int	init_philos(t_info *info, int i)
 {
-	pthread_mutex_lock(&info->start);
+	pthread_mutex_lock(&info->m_start);
 	info->philo[i].id = i + 1;
 	info->philo[i].nb_meals = 0;
 	info->philo[i].is_eating = false;
 	info->philo[i].last_meal = info->start;
 	info->philo[i].info = info;
-	if (pthread_mutex_init(&info->philo[i].left_fork, NULL) != 0 \
-	|| pthread_mutex_init(&info->philo[i].meal_lock, NULL) != 0)
+	pthread_mutex_unlock(&info->m_start);
+
+	if (pthread_mutex_init(&info->philo[i].left_fork, NULL) != 0
+		|| pthread_mutex_init(&info->philo[i].meal_lock, NULL) != 0)
 	{
 		free_all(info);
 		return (cleanup(info, i, true));
 	}
+
 	if (i == 0)
 		info->philo[i].right_fork = &info->philo[info->philo_nb - 1].left_fork;
 	else
