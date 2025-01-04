@@ -68,14 +68,19 @@ void	print(t_philo *philo, char *str)
 {
 	long long int	time;
 	bool			should_print;
+	long long int	start_time;
 
 	pthread_mutex_lock(&(philo->info->m_stop));
 	should_print = !philo->info->stop;
 	pthread_mutex_unlock(&(philo->info->m_stop));
 	if (!should_print)
 		return ;
+	pthread_mutex_lock(&(philo->info->start));
+	start_time = philo->info->start;
+	pthread_mutex_unlock(&(philo->info->start));
+
 	pthread_mutex_lock(&(philo->info->print));
-	time = get_time() - philo->info->start;
+	time = get_time() - start_time;
 	if (time >= 0 && time <= INT_MAX)
 		printf("%lld %d %s", time, philo->id, str);
 	pthread_mutex_unlock(&(philo->info->print));

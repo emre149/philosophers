@@ -65,6 +65,7 @@ static int	init_mutexs(t_info *info)
 
 static int	init_philos(t_info *info, int i)
 {
+	pthread_mutex_lock(&info->start);
 	info->philo[i].id = i + 1;
 	info->philo[i].nb_meals = 0;
 	info->philo[i].is_eating = false;

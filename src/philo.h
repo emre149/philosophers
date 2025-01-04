@@ -45,12 +45,13 @@ typedef struct s_info
 	int					time2_die;
 	int					time2_eat;
 	int					time2_sleep;
-	int					stop;
+	bool				stop;
 	t_philo				*philo;
 	pthread_mutex_t		print;
 	pthread_mutex_t		m_stop;
 	pthread_mutex_t		m_eat;
 	pthread_mutex_t		dead;
+	pthread_mutex_t		m_philo_eat;
 }	t_info;
 
 // CLEANING UTILS
