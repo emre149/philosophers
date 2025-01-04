@@ -6,7 +6,7 @@
 /*   By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:37:46 by ededemog          #+#    #+#             */
-/*   Updated: 2024/12/20 12:08:04 by ededemog         ###   ########.fr       */
+/*   Updated: 2025/01/04 19:15:57 by ededemog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,14 @@ void	free_all(t_info *info)
 	int	i;
 
 	i = 0;
+	// Attendre que tous les threads soient terminés
+	pthread_mutex_lock(&info->m_stop);
+	info->stop = true;
+	pthread_mutex_unlock(&info->m_stop);
+
+	// Attendre un court instant pour s'assurer que les threads ont vu le signal
+	usleep(1000);
+
 	while (i < info->philo_nb)
 	{
 		pthread_mutex_destroy(&info->philo[i].left_fork);
