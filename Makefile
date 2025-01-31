@@ -5,20 +5,22 @@
 #                                                     +:+ +:+         +:+      #
 #    By: ededemog <ededemog@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/10/29 16:12:40 by ededemog          #+#    #+#              #
-#    Updated: 2025/01/04 19:09:28 by ededemog         ###   ########.fr        #
+#    Created: 2025/01/31 16:07:55 by ededemog          #+#    #+#              #
+#    Updated: 2025/01/31 18:04:03 by ededemog         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
-CFLAGS = -Wall -Wextra -Werror -pthread -g 
+CFLAGS = -Wall -Wextra -Werror -pthread -g
 RM = rm -rf
-SRCS = 	src/main.c\
-		src/init.c\
-		src/utils.c\
-		src/utils2.c\
-		src/philo.c\
-		src/clean.c
+SRCS = 	srcs/main.c\
+		srcs/init.c\
+		srcs/utils.c\
+		srcs/philo.c\
+		srcs/clean.c\
+		srcs/philo2.c\
+		srcs/simu.c\
+		srcs/parser.c\
 
 .PHONY: all clean fclean re
 
